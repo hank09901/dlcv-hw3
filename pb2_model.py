@@ -321,7 +321,14 @@ class Decoder(nn.Module):
         # self.linear = nn.Linear(1408, cfg.n_embd)  # (1,257,1408->768)
         # self.linear = nn.Linear(1280, cfg.n_embd)  
         # self.linear = nn.Linear(1024, cfg.n_embd)
-        self.linear = nn.Linear(1664, cfg.n_embd)
+        # self.linear = nn.Linear(1664, cfg.n_embd)
+        self.linear = nn.Sequential([
+            nn.Linear(1664, 1024),
+            # batch normalization
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+            nn.Linear(1024, cfg.n_embd),
+        ])
 
         # load checkpoint
         if self.cfg.checkpoint is not None:
